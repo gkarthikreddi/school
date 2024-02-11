@@ -7,6 +7,9 @@ title: Welcome
 - [Web Technologies](WT)
 - [Cyber Security](ICS)
 - [Marketing](MMR)
+### Labs
+- [[CN LAB]]
+- [[WT LAB]]
 ## Two-Two
 - [Business Economics](BE)
 - [[FLAT]]
