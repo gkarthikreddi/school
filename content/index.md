@@ -1,6 +1,8 @@
 ---
 title: Welcome
 ---
+## Three-Two
+- [[ML LAB]]
 ## Three-One
 - [Computer Networks](CN)
 - [Software Engineering](SE)
