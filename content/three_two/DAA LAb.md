@@ -409,237 +409,130 @@ public class Job
     }
 }
 ```
-## Shortest Parth 
+## NQueen Problem 
 ```java
-import java.util.*;
-
-public class Dijkstra
-{
-    public int distance[] = new int[10];
-    public int cost[][] = new int[10][10];
-    public void calc(int n,int s)
+public class NQueenProblem {
+    final int N = 8;
+    void printSolution(int board[][])
     {
-        int flag[] = new int[n+1];
-        int i,minpos=1,k,c,minimum;
-        for(i=1;i<=n;i++)
-        {
-            flag[i]=0;
-            this.distance[i]=this.cost[s][i];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++)
+                System.out.print(" " + board[i][j]+ " ");
+            System.out.println();
         }
-        c=2;
-        while(c<=n)
-        {
-            minimum=99;
-            for(k=1;k<=n;k++)
-            {
-                if(this.distance[k]<minimum && flag[k]!=1)
-                {
-                    minimum=this.distance[i];
-                    minpos=k;
-                }
-            }
-            flag[minpos]=1;
-            c++;
-            for(k=1;k<=n;k++)
-            {
-                if(this.distance[minpos]+this.cost[minpos][k] < this.distance[k] && flag[k]!=1 )
-                    this.distance[k]=this.distance[minpos]+this.cost[minpos][k];
+    }
+    boolean isSafe(int board[][], int row, int col)
+    {
+        int i, j;
+        for (i = 0; i < col; i++)
+            if (board[row][i] == 1)
+                return false;
+        for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 1)
+                return false;
+        for (i = row, j = col; j >= 0 && i < N; i++, j--)
+            if (board[i][j] == 1)
+                return false;
+        return true;
+    }
+    boolean solveNQUtil(int board[][], int col)
+    {
+        if (col >= N)
+            return true;
+        for (int i = 0; i < N; i++) {
+            if (isSafe(board, i, col)) {
+                board[i][col] = 1;
+                if (solveNQUtil(board, col + 1) == true)
+                    return true;
+                board[i][col] = 0; // BACKTRACK
             }
         }
+        return false;
+    }
+    boolean solveNQ()
+    {
+        int board[][] = { { 0, 0, 0, 0 ,0,0,0,0},
+            { 0, 0, 0, 0 ,0,0,0,0},
+            { 0, 0, 0, 0,0,0,0,0},
+            { 0, 0, 0, 0 ,0,0,0,0},
+            {0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0}};
+        if (solveNQUtil(board, 0) == false) {
+            System.out.print("Solution does not exist");
+            return false;
+        }
+        printSolution(board);
+        return true;
     }
     public static void main(String args[])
     {
-        int nodes,source,i,j;
-        Scanner in = new Scanner(System.in);
-        System.out.println("Enter the Number of Nodes \n");
-        nodes = in.nextInt();
-        Dijkstra d = new Dijkstra();
-        System.out.println("Enter the Cost Matrix Weights: \n");
-        for(i=1;i<=nodes;i++)
-            for(j=1;j<=nodes;j++)
-            {
-                d.cost[i][j]=in.nextInt();
-                if(d.cost[i][j]==0)
-                    d.cost[i][j]=999;
-            }
-        System.out.println("Enter the Source Vertex :\n");
-        source=in.nextInt();
-        d.calc(nodes,source);
-        System.out.println("The Shortest Path from Source \t"+source+"\t to all other vertices are : \n");
-        for(i=1;i<=nodes;i++)
-            if(i!=source)
-                System.out.println("source :"+source+"\t destination :"+i+"\t MinCost is :"+d.distance[i]+"\t");
+        NQueenProblem Queen = new NQueenProblem();
+        Queen.solveNQ();
     }
 }
 ```
-### Output
->Enter the Number of Nodes\
->4\
->Enter the Cost Matrix Weights:\
->0 3 0 7\
->3 0 4 2\
->0 4 0 5\
->7 2 5 0\
->Enter the Source Vertex :\
->1\
->The Shortest Path from Source 	1	 to all other vertices are :\
->source :1	 destination :2	 MinCost is :3\
->source :1	 destination :3	 MinCost is :7\
->source :1	 destination :4	 MinCost is :5
-## Spanning Tree
+## Sum of Subsets
 ```java
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Prims
-{
-    private boolean unsettled[];
-    private boolean settled[];
-    private int numberofvertices;
-    private int adjacencyMatrix[][];
-    private int key[];
-    public static final int INFINITE = 999;
-    private int parent[];
-    public Prims(int numberofvertices)
-    {
-        this.numberofvertices = numberofvertices;
-        unsettled = new boolean[numberofvertices + 1];
-        settled = new boolean[numberofvertices + 1];
-        adjacencyMatrix = new int[numberofvertices + 1][numberofvertices + 1];
-        key = new int[numberofvertices + 1];
-        parent = new int[numberofvertices + 1];
+public class SumOfSubsets {
+    int[] w;
+    int[] x;
+    int sum;
+    public void process() {
+        getData();
     }
-    public int getUnsettledCount(boolean unsettled[])
-    {
-        int count = 0;
-        for (int index = 0; index < unsettled.length; index++)
-        {
-            if (unsettled[index])
-            {
-                count++;
+    private void getData() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of elements:");
+        int n = sc.nextInt();
+        w = new int[n + 1];
+        x = new int[n + 1];
+        int total = 0;
+        System.out.println("Enter " + n + " Elements :");
+        for (int i = 1; i < n + 1; i++) {
+            w[i] = sc.nextInt();
+            total += w[i];
+        }
+        System.out.println("Enter the sum to be obtained: ");
+        sum = sc.nextInt();
+        if (total < sum) {
+            System.out.println("Not possible to obtain the subset!!!");
+            System.exit(1);
+        }
+        subset(0, 1, total);
+    }
+    private void subset(int s, int k, int r) {
+        int i = 0;
+        x[k] = 1;
+        if (s + w[k] == sum) {
+            System.out.println();
+            for (i = 1; i <= k; i++) {
+                System.out.print("\t" + x[i]);
             }
+        } else if ((s + w[k] + w[k + 1]) <= sum) {
+            subset(s + w[k], k + 1, r - w[k]);
         }
-        return count;
-    }
-    public void primsAlgorithm(int adjacencyMatrix[][])
-    {
-        int evaluationVertex;
-        for (int source = 1; source <= numberofvertices; source++)
-        {
-            for (int destination = 1; destination <= numberofvertices; destination++)
-            {
-                this.adjacencyMatrix[source][destination] =
-                    adjacencyMatrix[source][destination];
-            }
-        }
-        for (int index = 1; index <= numberofvertices; index++)
-        {
-            key[index] = INFINITE;
-        }
-        key[1] = 0;
-        unsettled[1] = true;
-        parent[1] = 1;
-        while (getUnsettledCount(unsettled) != 0)
-        {
-            evaluationVertex = getMimumKeyVertexFromUnsettled(unsettled);
-            unsettled[evaluationVertex] = false;
-            settled[evaluationVertex] = true;
-            evaluateNeighbours(evaluationVertex);
+        if ((s + r - w[k]) >= sum && (s + w[k + 1]) <= sum) {
+            x[k] = 0;
+            subset(s, k + 1, r - w[k]);
         }
     }
-    private int getMimumKeyVertexFromUnsettled(boolean[] unsettled2)
-    {
-        int min = Integer.MAX_VALUE;
-        int node = 0;
-        for (int vertex = 1; vertex <= numberofvertices; vertex++)
-        {
-            if (unsettled[vertex] == true && key[vertex] < min)
-            {
-                node = vertex;
-                min = key[vertex];
-            }
-        }
-        return node;
-    }
-    public void evaluateNeighbours(int evaluationVertex)
-    {
-        for (int destinationvertex = 1; destinationvertex <= numberofvertices;
-                destinationvertex++)
-        {
-            if (settled[destinationvertex] == false)
-            {
-                if (adjacencyMatrix[evaluationVertex][destinationvertex] != INFINITE)
-                {
-                    if (adjacencyMatrix[evaluationVertex][destinationvertex] <
-                            key[destinationvertex])
-                    {
-                        key[destinationvertex] =
-                            adjacencyMatrix[evaluationVertex][destinationvertex];
-                        parent[destinationvertex] = evaluationVertex;
-                    }
-                    unsettled[destinationvertex] = true;
-                }
-            }
-        }
-    }
-    public void printMST()
-    {
-        System.out.println("SOURCE : DESTINATION = WEIGHT");
-        for (int vertex = 2; vertex <= numberofvertices; vertex++)
-        {
-            System.out.println(parent[vertex] + "\t:\t" + vertex +"\t=\t"+
-                    adjacencyMatrix[parent[vertex]][vertex]);
-        }
-    }
-    public static void main(String... arg)
-    {
-        int adjacency_matrix[][];
-        int number_of_vertices;
-        Scanner scan = new Scanner(System.in);
-        try
-        {
-            System.out.println("Enter the number of vertices");
-            number_of_vertices = scan.nextInt();
-            adjacency_matrix = new int[number_of_vertices + 1][number_of_vertices + 1];
-            System.out.println("Enter the Weighted Matrix for the graph");
-            for (int i = 1; i <= number_of_vertices; i++)
-            {
-                for (int j = 1; j <= number_of_vertices; j++)
-                {
-                    adjacency_matrix[i][j] = scan.nextInt();
-                    if (i == j)
-                    {
-                        adjacency_matrix[i][j] = 0;
-                        continue;
-                    }
-                    if (adjacency_matrix[i][j] == 0)
-                    {
-                        adjacency_matrix[i][j] = INFINITE;
-                    }
-                }
-            }
-            Prims prims = new Prims(number_of_vertices);
-            prims.primsAlgorithm(adjacency_matrix);
-            prims.printMST();
-        } catch (InputMismatchException inputMismatch)
-        {
-            System.out.println("Wrong Input Format");
-        }
-        scan.close();
+    public static void main(String[] args) {
+        new SumOfSubsets().process();
     }
 }
 ```
 ### Output
->Enter the number of vertices\
->5\
->Enter the Weighted Matrix for the graph\
->0 4 0 0 5\
->4 0 3 6 1\
->0 3 0 6 2\
->0 6 6 0 7\
->5 1 2 7 0\
->SOURCE : DESTINATION = WEIGHT\
->1	:	2	=	4\
->5	:	3	=	2\
->2	:	4	=	6\
->2	:	5	=	1
+>Enter the number of elements:4\
+Enter 4 Elements :\
+7\
+11\
+13\
+24\
+Enter the sum to be obtained:\
+31\
+1	1	1\
+1	0	0	1
