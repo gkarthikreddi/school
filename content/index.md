@@ -3,6 +3,7 @@ title: Welcome
 ---
 ## Three-Two
 - [[ML LAB]]
+- [[DAA LAb]]
 ## Three-One
 - [Computer Networks](CN)
 - [Software Engineering](SE)
