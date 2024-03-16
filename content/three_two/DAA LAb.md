@@ -213,7 +213,7 @@ public class DFS
 >1\
 >The DFS Traversal for the graph is given by\
 >1	2	3	4
-### Breadth First Search
+## Breadth First Search
 ```java
 import java.util.InputMismatchException;
 import java.util.Scanner;
