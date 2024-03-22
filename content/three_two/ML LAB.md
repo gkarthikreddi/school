@@ -1,6 +1,3 @@
-- [[#Find S]]
-- [[#Candidate Elimination]]
-- [[#Linear Regression]]
 ## Find S
 ```python
 import numpy as np
@@ -26,17 +23,9 @@ def train(sample, target):
 
     return specific_hypothesis
 
-def predict(sample, specific_hypothesis):
-    for i in range(len(sample)):
-        if specific_hypothesis[i] != '?' and specific_hypothesis[i] != sample[i]:
-            return False
-    return True
 
 specific_hypothesis = train(sample, target)
 print("Specific Hypothesis: ", specific_hypothesis)
-example = ["Night", "Sunny", "Moderate", "Yes", "Normal", "Low"]
-ans = predict(example, specific_hypothesis)
-print("Prediction for ", example, " is ", ans)
 ```
 ## Candidate Elimination
 ```python
@@ -83,42 +72,43 @@ import matplotlib.pyplot as plt
 data = pd.read_csv("dataset.csv")
 x = list(np.array(data)[:,0])
 y = list(np.array(data)[:,-1])
-x_label = "Pizza Diameter"
-y_label = "Pizza Price"
 
-class Linear_regression:
-    def __init__(self, x, y, x_label, y_label):
-        self.x = x
-        self.y = y
-        self.x_label = x_label
-        self.y_label = y_label
-        mean_x = sum(x) / len(x)
-        mean_y = sum(y) / len(y)
-        deviation_x = [i-mean_x for i in x]
-        deviation_y = [i-mean_y for i in y]
-        product_deviation = [i*j for i, j in zip(deviation_x, deviation_y)]
-        square_deviation_x = [i**2 for i in deviation_x]
-        self.slope = sum(product_deviation) / sum(square_deviation_x)
-        self.intercept = mean_y - (self.slope * mean_x)
+mean_x = sum(x) / len(x)
+mean_y = sum(y) / len(y)
 
-    def plot(self):
-        upperbound = max(self.x) + 10
-        lowerbound = min(self.x) - 10
-        X = [i for i in range(lowerbound, upperbound)]
-        Y = [i*self.slope + self.intercept for i in X]
-        plt.scatter(self.x, self.y)
-        plt.plot(X, Y)
-        plt.xlabel(self.x_label)
-        plt.ylabel(self.y_label)
-        plt.title("Linear Regression")
-        return plt
+deviation_x = [i-mean_x for i in x]
+deviation_y = [i-mean_y for i in y]
 
-    def predict(self, value):
-        return value*self.slope + self.intercept
+product_deviation = [i*j for i, j in zip(deviation_x, deviation_y)]
+square_deviation_x = [i**2 for i in deviation_x]
 
-line = Linear_regression(x, y, x_label, y_label)
-graph = line.plot()
-graph.show()
-ans = line.predict(20)
-print(ans)
+slope = sum(product_deviation) / sum(square_deviation_x)
+intercept = mean_y - (slope * mean_x)
+
+
+X = [i for i in range(-1, 20)]
+Y = [i*slope + intercept for i in X]
+
+plt.scatter(x, y)
+plt.plot(X, Y)
+plt.show()
+```
+## K-Nearest Neighbor (KNN)
+```python
+from sklearn.model_selection  import train_test_split
+from sklearn.neighbors import KNeighborsClassifier as kn
+from sklearn import datasets
+
+iris = datasets.load_iris()
+
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size = 0.1)
+
+for i in range(len(iris.target_names)):
+	print("Label ", i, '- ', str(iris.target_names[i]))
+
+k = 3
+classifier = kn(n_neighbors = k)
+classifier.fit(x_train, y_train)
+y_pred = classifier.predict(x_test)
+print("Accuracy for k:",k,"is ", classifier.score(x_test, y_test))
 ```
